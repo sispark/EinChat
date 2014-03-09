@@ -6,8 +6,8 @@
 EinClient::EinClient(QWidget* p_parent)
     : QDialog(p_parent), mesg_disp(""), mesg_send("") {
     //生成标签与文本框
-    p_label_disp = new QLabel(tr("Disp"));
-    p_label_send = new QLabel(tr("Mesg"));
+    p_label_disp = new QLabel(tr("&Disp"));
+    p_label_send = new QLabel(tr("&Mesg"));
     p_mesg_disp = new QTextEdit;
     p_mesg_send = new QLineEdit;
     p_mesg_disp->setText(mesg_disp);
