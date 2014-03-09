@@ -6,10 +6,11 @@
 EinClient::EinClient(QWidget* p_parent)
     : QDialog(p_parent), mesg_disp(""), mesg_send("") {
     //生成标签与文本框
-    p_label_disp = new QLabel(tr("&Disp"));
+    p_label_disp = new QLabel(tr("Disp"));
     p_label_send = new QLabel(tr("&Mesg"));
     p_mesg_disp = new QTextEdit;
-    p_mesg_send = new QLineEdit;
+    p_mesg_send = new QTextEdit;
+    p_mesg_disp->setReadOnly(TRUE);
     p_mesg_disp->setText(mesg_disp);
     p_mesg_send->setText(mesg_send);
     //将对应文本框设定为标签的伙伴(buddy)
@@ -23,7 +24,7 @@ EinClient::EinClient(QWidget* p_parent)
     p_send_button->setToolTip(tr("Unavailable Now!"));
 
     //文本框内容变化时更新进程按钮状态
-    connect(p_mesg_send, SIGNAL(textChanged(const QString&)),
+    connect(p_mesg_send, SIGNAL(textChanged()),
             this, SLOT(EnableSendButton()));
 
     //点击进程按钮时执行对应的操作
@@ -55,15 +56,16 @@ EinClient::EinClient(QWidget* p_parent)
 //点击消息按钮，读取要发送的消息
 void EinClient::SendClicked() {
     //读取要发送的消息
-    mesg_send = p_mesg_send->text();
+    mesg_send = p_mesg_send->toPlainText();
+    p_mesg_send->setText("");
     mesg_disp = mesg_send;
-    p_mesg_disp->setText(mesg_disp);
+    p_mesg_disp->append(mesg_disp);
 }
 
 //根据消息文本框的内容，更新进程按钮状态
 void EinClient::EnableSendButton() {
     //消息文本框不为空
-    if(!p_mesg_send->text().isEmpty()) {
+    if(!p_mesg_send->toPlainText().isEmpty()) {
         //进程按钮有效，关闭提示信息
         p_send_button->setEnabled(true);
         p_send_button->setToolTip(tr(""));
@@ -75,22 +77,10 @@ void EinClient::EnableSendButton() {
 }
 
 //根据错误种类弹出错误提示框
-//1：两个文件是同一个
-//2：文件不存在
-//3：文件无法打开
 //其他错误
 void EinClient::ErrorMessage(int num) {
     QString error_info;
     switch(num) {
-    case 1:
-        error_info = "Two files are the same!";
-        break;
-    case 2:
-        error_info = "Files are not exist!";
-        break;
-    case 3:
-        error_info = "File can't be opened!";
-        break;
     default:
         error_info = "Other errors!";
         break;

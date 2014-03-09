@@ -26,7 +26,7 @@ private:
     QLabel* p_label_disp;
     QLabel* p_label_send;
     QTextEdit* p_mesg_disp;
-    QLineEdit* p_mesg_send;
+    QTextEdit* p_mesg_send;
     QPushButton* p_send_button;
     //存储用户要发送与要显示的消息
     QString mesg_disp;
