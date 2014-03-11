@@ -2,27 +2,6 @@
 #define EINCLIENT_H
 #include <QDialog>
 
-//for mesg send 0
-#include <iostream>
-#include <netinet/in.h>
-#include <cstring>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <string>
-#include <iostream>
-
-#define SERV_PORT        9877           /* TCP and UDP */
-#define SA  struct sockaddr
-#define MAXLINE     4096    /* max text line length */
-
-extern const char* local_ip;
-void SendMesg(const char* send_mesg);
-ssize_t writen(int fd, const void* vptr, size_t n);
-ssize_t my_read(int fd, char* ptr);
-ssize_t readline(int fd, void* vptr, size_t maxlen);
-//for mesg send 1
-
 //对应控件的前置声明类
 class QLabel;
 class QTextEdit;
