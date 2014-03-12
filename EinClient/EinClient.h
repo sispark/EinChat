@@ -2,6 +2,9 @@
 #define EINCLIENT_H
 #include <QDialog>
 
+#include <string>
+using std::string;
+
 //对应控件的前置声明类
 class QLabel;
 class QTextEdit;
@@ -30,8 +33,11 @@ private:
     QTextEdit* p_mesg_send;
     QPushButton* p_send_button;
     //存储用户要发送与要显示的消息
-    QString mesg_disp;
-    QString mesg_send;
+    QString m_mesg_disp;
+    QString m_mesg_send;
+
+public:
+    string m_mesg_change;
 };
 
 #endif

@@ -2,22 +2,21 @@
 #include "EinClient.h"
 #include "SendMesg.cpp"
 #include <iostream>
-#include <string>
 using std::string;
 using std::cout;
 using std::endl;
 
 //对话框的构造函数
 EinClient::EinClient(QWidget* p_parent)
-    : QDialog(p_parent), mesg_disp(""), mesg_send("") {
+    : QDialog(p_parent), m_mesg_disp(""), m_mesg_send(""), m_mesg_change("") {
     //生成标签与文本框
     p_label_disp = new QLabel(tr("Disp"));
     p_label_send = new QLabel(tr("&Mesg"));
     p_mesg_disp = new QTextEdit;
     p_mesg_send = new QTextEdit;
     p_mesg_disp->setReadOnly(TRUE);
-    p_mesg_disp->setText(mesg_disp);
-    p_mesg_send->setText(mesg_send);
+    p_mesg_disp->setText(m_mesg_disp);
+    p_mesg_send->setText(m_mesg_send);
     //将对应文本框设定为标签的伙伴(buddy)
     p_label_disp->setBuddy(p_mesg_disp);
     p_label_send->setBuddy(p_mesg_send);
@@ -56,19 +55,21 @@ EinClient::EinClient(QWidget* p_parent)
 
     //设定主对话框
     setLayout(p_main_layout);
+
+//    SendMesg(m_mesg_change);
 }
 
 //点击消息按钮，读取要发送的消息
 void EinClient::SendClicked() {
     //读取要发送的消息
-    mesg_send = p_mesg_send->toPlainText();
+    m_mesg_send = p_mesg_send->toPlainText();
     p_mesg_send->setText("");
-    string mesg_to_send;
-    mesg_to_send = mesg_send.toStdString();
-    cout<<"UI Send Mesg:"<<mesg_to_send<<endl;
-    SendMesg(mesg_to_send.c_str());
-    mesg_disp = mesg_send;
-    p_mesg_disp->append(mesg_disp);
+    //string mesg_to_send;
+    m_mesg_change = m_mesg_send.toStdString();
+    cout<<"UI Send Mesg:"<<m_mesg_change<<endl;
+    SendMesg(m_mesg_change);
+    m_mesg_disp = m_mesg_send;
+    p_mesg_disp->append(m_mesg_disp);
 }
 
 //根据消息文本框的内容，更新进程按钮状态

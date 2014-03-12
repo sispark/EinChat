@@ -2,12 +2,16 @@
 
 using std::cout;
 using std::endl;
+using std::string;
 
 const char* local_ip = "127.0.0.1";
 
 //向服务端发送消息
-void SendMesg(const char* send_mesg) {
-    cout<<"Mesg to Server:"<<send_mesg<<endl;
+void SendMesg(string& m_mesg) {
+    pid_t mesg_pid;
+    if((mesg_pid = fork()) == 0) {
+
+    cout<<"Mesg to Server:"<<m_mesg<<endl;
     int sockfd;
     struct sockaddr_in servaddr;
 
@@ -19,12 +23,24 @@ void SendMesg(const char* send_mesg) {
     connect(sockfd, (SA*)&servaddr, sizeof(servaddr));
 
     char recv_mesg[MAXLINE];
+
+    while(m_mesg != "") {
+
+    const char* send_mesg = m_mesg.c_str();
     writen(sockfd, send_mesg, strlen(send_mesg));
     cout<<"Have Send Mesg:"<<send_mesg<<endl;
-    readline(sockfd, recv_mesg, MAXLINE);
+    if(readline(sockfd, recv_mesg, MAXLINE) == 0) {
+        cout<<"Receive Error"<<endl;
+        return;
+    }
     cout<<"Now Recive Mesg:"<<recv_mesg<<endl;
+    m_mesg = "";
+
+    }
 
     close(sockfd);
+    
+    }
 }
 
 ssize_t my_read(int fd, char* ptr) {
