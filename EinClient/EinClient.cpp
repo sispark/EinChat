@@ -8,7 +8,8 @@ using std::endl;
 
 //对话框的构造函数
 EinClient::EinClient(QWidget* p_parent)
-    : QDialog(p_parent), m_mesg_disp(""), m_mesg_send(""), m_mesg_change("") {
+    : QDialog(p_parent), m_mesg_disp(""), m_mesg_send(""),
+    m_mesg_change("") {
     //生成标签与文本框
     p_label_disp = new QLabel(tr("Disp"));
     p_label_send = new QLabel(tr("&Mesg"));
@@ -55,8 +56,6 @@ EinClient::EinClient(QWidget* p_parent)
 
     //设定主对话框
     setLayout(p_main_layout);
-
-//    SendMesg(m_mesg_change);
 }
 
 //点击消息按钮，读取要发送的消息
@@ -64,9 +63,9 @@ void EinClient::SendClicked() {
     //读取要发送的消息
     m_mesg_send = p_mesg_send->toPlainText();
     p_mesg_send->setText("");
-    //string mesg_to_send;
     m_mesg_change = m_mesg_send.toStdString();
-    cout<<"UI Send Mesg:"<<m_mesg_change<<endl;
+    cout<<"UI Send Mesg:"<<endl;
+    cout<<m_mesg_change<<endl;
     SendMesg(m_mesg_change);
     m_mesg_disp = m_mesg_send;
     p_mesg_disp->append(m_mesg_disp);

@@ -7,11 +7,10 @@ using std::string;
 const char* local_ip = "127.0.0.1";
 
 //向服务端发送消息
-void SendMesg(string& m_mesg) {
-    pid_t mesg_pid;
-    if((mesg_pid = fork()) == 0) {
-
-    cout<<"Mesg to Server:"<<m_mesg<<endl;
+string SendMesg(string& s_mesg_send) {
+    cout<<"Mesg to Server:"<<endl;
+    cout<<s_mesg_send<<endl;
+    string s_mesg_receive;
     int sockfd;
     struct sockaddr_in servaddr;
 
@@ -23,24 +22,21 @@ void SendMesg(string& m_mesg) {
     connect(sockfd, (SA*)&servaddr, sizeof(servaddr));
 
     char recv_mesg[MAXLINE];
-
-    while(m_mesg != "") {
-
-    const char* send_mesg = m_mesg.c_str();
-    writen(sockfd, send_mesg, strlen(send_mesg));
-    cout<<"Have Send Mesg:"<<send_mesg<<endl;
-    if(readline(sockfd, recv_mesg, MAXLINE) == 0) {
-        cout<<"Receive Error"<<endl;
-        return;
-    }
-    cout<<"Now Recive Mesg:"<<recv_mesg<<endl;
-    m_mesg = "";
-
+    while(s_mesg_send != "") {
+        const char* send_mesg = s_mesg_send.c_str();
+        writen(sockfd, send_mesg, strlen(send_mesg));
+        if(readline(sockfd, recv_mesg, MAXLINE) == 0) {
+            cout<<"Receive Error"<<endl;
+            return "";
+        }
+        cout<<"Now Recive Mesg:"<<endl;
+        cout<<recv_mesg<<endl;
+        s_mesg_send = "";
+        s_mesg_receive = send_mesg;
     }
 
     close(sockfd);
-    
-    }
+    return s_mesg_receive;
 }
 
 ssize_t my_read(int fd, char* ptr) {
@@ -87,7 +83,7 @@ ssize_t readline(int fd, void* vptr, size_t maxlen) {
     for(n = 1; n < (ssize_t)maxlen; ++n) {
         if((rc = my_read(fd, &c)) == 1) {
             *ptr++ = c;
-            if(c == '\n') {
+            if(c == '\0') {
                 break;
             }
         } else if(rc == 0) {
