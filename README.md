@@ -7,3 +7,4 @@ Write a C/S program to chat with others.
 
 1
 实现消息的发送与原样返回。
+目前实现的部分是：客户端发送消息，服务端受到消息并返回。
